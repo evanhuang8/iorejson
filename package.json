@@ -1,0 +1,23 @@
+{
+  "name": "rejson",
+  "version": "0.1.0",
+  "description": "A redis client for the redis rejson module.",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint lib && mocha --require co-mocha tests/test_*"
+  },
+  "keywords": [
+    "rejson"
+  ],
+  "author": "Evan Huang <evan@epharmix.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ioredis": "2.5.x",
+    "lodash": "4.17.x"
+  },
+  "devDependencies": {
+    "chai": "3.5.x",
+    "co-mocha": "1.2.x",
+    "mocha": "3.2.x"
+  }
+}
