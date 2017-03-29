@@ -131,6 +131,56 @@ describe('Rejson', function() {
       expect(keys).to.deep.equal(['fil', 'burger', 'shake']);
     });
 
+    it('#type', function* () {
+      var result;
+      var key = getKey('test_type');
+      var path = '.';
+      var value = {
+        foo: 'bar',
+        chic: {
+          fil: true,
+          a: 3.1415926
+        },
+        'is': 1
+      };
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      var entries = [
+        ['.', 'object'],
+        ['.foo', 'string'],
+        ['.chic', 'object'],
+        ['.is', 'integer'],
+        ['.chic.fil', 'boolean'],
+        ['.chic.a', 'number']
+      ];
+      for (var i in entries) {
+        var type = yield this.instance.type(key, entries[i][0]);
+        expect(type).to.equal(entries[i][1]);
+      }
+    });
+
+    it('#numincrby', function* () {
+      var result;
+      var key = getKey('test_numincrby');
+      var path = '.';
+      var value = {
+        a: 1,
+        b: 2.333333,
+        c: 4,
+        d: 'hello',
+        e: true,
+        f: {
+          g: 4
+        }
+      };
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.numincrby(key, '.a', 2);
+      expect(result).to.equal(3);
+      result = yield this.instance.numincrby(key, '.b', 1.333333);
+      expect(result).to.equal(3.666666);
+    });
+
   });
 
   describe.skip('Query', function() {

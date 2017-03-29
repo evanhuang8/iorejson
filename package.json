@@ -1,10 +1,14 @@
 {
-  "name": "rejson",
+  "name": "iorejson",
   "version": "0.1.0",
   "description": "A redis client for the redis rejson module.",
   "main": "index.js",
   "scripts": {
     "test": "eslint lib && mocha --require co-mocha tests/test_*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evanhuang8/iorejson.git"
   },
   "keywords": [
     "rejson"
