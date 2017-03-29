@@ -4,11 +4,29 @@
 
 The node client for the rejson module of redis. Under the hood it uses the `ioredis` client, and the APIs are conformed to the conventions of `ioredis`.
 
+## Example Usage
+
+```javascript
+var Rejson = require('rejson');
+
+var instance = new Rejson();
+yield instance.connect()
+
+yield instance.set('foo', '.', {
+  bar: {
+    hello: 'world'
+  }
+});
+
+value = yield instance.get('foo', '.');
+console.log(value);
+```
+
 ## Development
 
-To get started, simply install the require modules via `npm install`, and then make sure `mocha` is in your global path.
+To get started, simply install the require modules via `npm install`.
 
-You may run the unit tests using `npm test`.
+You may run the unit tests using `npm test`. Make sure `mocha` and `eslint` are in your global path.
 
 ## License
 
