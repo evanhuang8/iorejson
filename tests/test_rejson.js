@@ -131,6 +131,28 @@ describe('Rejson', function() {
       expect(keys).to.deep.equal(['fil', 'burger', 'shake']);
     });
 
+    it('#objlen', function*() {
+      var result;
+      var key = getKey('test_objlen');
+      var path = '.';
+      var value = {
+        foo: 'bar',
+        chic: {
+          fil: 'a',
+          burger: 'tasy',
+          shake: false,
+          joker: null
+        },
+        'is': 1
+      };
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      length = yield this.instance.objlen(key, path);
+      expect(length).to.deep.equal(3);
+      length = yield this.instance.objlen(key, '.chic');
+      expect(length).to.deep.equal(4);
+    });
+
     it('#type', function* () {
       var result;
       var key = getKey('test_type');
@@ -167,7 +189,7 @@ describe('Rejson', function() {
         a: 1,
         b: 2.333333,
         c: 4,
-        d: 'hello',
+        d: 'skip',
         e: true,
         f: {
           g: 4
@@ -179,6 +201,292 @@ describe('Rejson', function() {
       expect(result).to.equal(3);
       result = yield this.instance.numincrby(key, '.b', 1.333333);
       expect(result).to.equal(3.666666);
+      result = yield this.instance.numincrby(key, '.c', -3.75);
+      expect(result).to.equal(0.25);
+      try {
+        result = yield this.instance.numincrby(key, '.d', 0.4);
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      try {
+        result = yield this.instance.numincrby(key, '.e', 0.4);
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      result = yield this.instance.numincrby(key, '.f.g', 32);
+      expect(result).to.equal(36);
+      try {
+        result = yield this.instance.numincrby(key, '.a', 'hello');
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+    });
+
+    it('#nummultby', function* () {
+      var result;
+      var key = getKey('test_nummultby');
+      var path = '.';
+      var value = {
+        a: 1,
+        b: 2.333333,
+        c: 4,
+        d: 'skip',
+        e: true,
+        f: {
+          g: 4
+        }
+      };
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.nummultby(key, '.a', 2);
+      expect(result).to.equal(2);
+      result = yield this.instance.nummultby(key, '.b', 1.333333);
+      expect(result).to.equal(1.333333 * 2.333333);
+      result = yield this.instance.nummultby(key, '.c', -3.75);
+      expect(result).to.equal(-15);
+      try {
+        result = yield this.instance.nummultby(key, '.d', 0.4);
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      try {
+        result = yield this.instance.nummultby(key, '.e', 0.4);
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      result = yield this.instance.nummultby(key, '.f.g', 32);
+      expect(result).to.equal(128);
+      try {
+        result = yield this.instance.nummultby(key, '.a', 'hello');
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+    });
+
+    it('#strappend', function* () {
+      var result;
+      var key = getKey('test_strappend');
+      var path = '.';
+      var value = {
+        a: 'hello',
+        b: 1,
+        c: '',
+        d: false,
+        e: {
+          f: 'world'
+        }
+      };
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.strappend(key, '.a', 'ma2p');
+      expect(result).to.equal(9);
+      try {
+        result = yield this.instance.strappend(key, '.b', 'hello');
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      result = yield this.instance.strappend(key, '.c', 'averylongstring');
+      expect(result).to.equal(15);
+      try {
+        result = yield this.instance.strappend(key, '.d', 'hello');
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      try {
+        result = yield this.instance.strappend(key, '.e', 'hello');
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      result = yield this.instance.strappend(key, '.e.f', 'bayless');
+      expect(result).to.equal(12);
+    });
+
+    it('#strlen', function* () {
+      var result;
+      var key = getKey('test_strlen');
+      var path = '.';
+      var value = {
+        a: 'hello',
+        b: 1,
+        c: '',
+        d: false,
+        e: {
+          f: 'world'
+        }
+      };
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.strlen(key, '.a');
+      expect(result).to.equal(5);
+      try {
+        result = yield this.instance.strlen(key, '.b');
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      result = yield this.instance.strlen(key, '.c');
+      expect(result).to.equal(0);
+      try {
+        result = yield this.instance.strlen(key, '.d');
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      try {
+        result = yield this.instance.strlen(key, '.e');
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      result = yield this.instance.strlen(key, '.e.f');
+      expect(result).to.equal(5);
+    });
+
+    it('#arrappend', function* () {
+      var result;
+      var key = getKey('test_arrappend');
+      var path = '.';
+      var value = {
+        a: 'hello',
+        b: [1, 2, 3],
+        c: {
+          d: ['ello']
+        }
+      };
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      try {
+        result = yield this.instance.arrappend(key, '.a', 1);
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      result = yield this.instance.arrappend(key, '.b', 4, 5, 6);
+      expect(result).to.equal(6);
+      items = yield this.instance.get(key, '.b');
+      expect(items).to.deep.equal([1, 2, 3, 4, 5, 6]);
+      result = yield this.instance.arrappend(key, '.b', 'foo', true, null);
+      expect(result).to.equal(9);
+      items = yield this.instance.get(key, '.b');
+      expect(items).to.deep.equal([1, 2, 3, 4, 5, 6, 'foo', true, null]);
+      try {
+        result = yield this.instance.arrappend(key, '.c', 1);
+        throw 1;
+      } catch (err) {
+        if (err === 1) {
+          throw new Error('Expecting error but it succeeded!');
+        }
+      }
+      result = yield this.instance.arrappend(key, '.c.d', 'foo', true, null);
+      expect(result).to.equal(4);
+      items = yield this.instance.get(key, '.c.d');
+      expect(items).to.deep.equal(['ello', 'foo', true, null]);
+      var key = getKey('test_arrappend_2');
+      var path = '.';
+      var value = ['hello'];
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.arrappend(key, '.', 'foo', true, null);
+      expect(result).to.equal(4);
+      items = yield this.instance.get(key, '.');
+      expect(items).to.deep.equal(['hello', 'foo', true, null]);
+    });
+
+    it('#arrindex', function* () {
+      var result;
+      var key = getKey('test_arrindex');
+      var path = '.';
+      var value = ['hello', 'world', true, 1, 3, null, false];
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      for (var i in value) {
+        var item = value[i];
+        result = yield this.instance.arrindex(key, path, item);
+        expect(result).to.equal(parseInt(i));
+      }
+    });
+
+    it('#arrinsert', function* () {
+      var result;
+      var key = getKey('test_arrinsert');
+      var path = '.';
+      var value = ['hello', 'world', true, 1, 3, null, false];
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.arrinsert(key, path, 1, 'foo');
+      expect(result).to.equal(8);
+      result = yield this.instance.get(key, path);
+      expect(result).to.deep.equal(['hello', 'foo', 'world', true, 1, 3, null, false]);
+    });
+
+    it('#arrlen', function* () {
+      var result;
+      var key = getKey('test_arrlen');
+      var path = '.';
+      var value = ['hello', 'world', true, 1, 3, null, false];
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.arrlen(key, path);
+      expect(result).to.equal(7);
+    });
+
+    it('#arrlen', function* () {
+      var result;
+      var key = getKey('test_arrlen');
+      var path = '.';
+      var value = ['hello', 'world', true, 1, 3, null, false];
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.arrpop(key, path, 2);
+      expect(result).to.equal(true);
+      result = yield this.instance.arrpop(key, path, 2);
+      expect(result).to.equal(1);
+    });
+
+    it('#arrtrim', function* () {
+      var result;
+      var key = getKey('test_arrtrim');
+      var path = '.';
+      var value = ['hello', 'world', true, 1, 3, null, false];
+      result = yield this.instance.set(key, path, value);
+      expect(result).to.be.true;
+      result = yield this.instance.arrtrim(key, path, 2, 5);
+      expect(result).to.equal(4);
     });
 
   });
