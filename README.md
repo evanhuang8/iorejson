@@ -58,7 +58,7 @@ You can make a file under `tests` that is called `redis.json` to specify your ow
 
 The MIT License (MIT)
 
-Copyright (c) 2017 Epharmix <evan@epharmix.com>
+Copyright (c) 2017 Evan Huang <evanhuang8@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

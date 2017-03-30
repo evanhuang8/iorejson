@@ -13,7 +13,11 @@
   "keywords": [
     "rejson"
   ],
-  "author": "Evan Huang <evan@epharmix.com>",
+  "author": "Evan Huang <evanhuang8@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/evanhuang8/iorejson/issues"
+  },
+  "homepage": "https://github.com/evanhuang8/iorejson#readme",
   "license": "MIT",
   "dependencies": {
     "ioredis": "2.5.x",
