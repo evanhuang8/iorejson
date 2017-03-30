@@ -4,6 +4,14 @@
 
 The node client for the rejson module of redis. Under the hood it uses the `ioredis` client, and the APIs are conformed to the conventions of `ioredis`.
 
+## Installation
+
+```
+npm install iorejson
+```
+
+Unfortunately, the name `rejson` in npm is already taken.
+
 ## Example Usage
 
 ```javascript
@@ -22,11 +30,29 @@ value = yield instance.get('foo', '.');
 console.log(value);
 ```
 
+## Connection
+
+This modules passes all connection options directly onto `ioredis`, so you can just refer to its [documentation](https://github.com/luin/ioredis#connect-to-redis) for connection options.
+
+By default, the client will connect automatically and emit a `ready` event when the connection is established. You can either listen to the `ready` event or use the `rejson.connect()` method, which returns a promise that resolves when connection is established.
+
+## APIs
+
+See [the API documentation](APIs.md).
+
+Commands not implemented:
+
+- `JSON.DEBUG`
+- `JSON.FORGET` - use `JSON.DEL` instead
+- `JSON.RESP`
+
 ## Development
 
 To get started, simply install the require modules via `npm install`.
 
 You may run the unit tests using `npm test`. Make sure `mocha` and `eslint` are in your global path.
+
+You can make a file under `tests` that is called `redis.json` to specify your own redis credentials to use in tests.
 
 ## License
 
