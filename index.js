@@ -1,1 +1,1 @@
-module.exports = require('./libs/rejson');
+module.exports = require('./lib/rejson');

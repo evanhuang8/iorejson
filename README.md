@@ -15,7 +15,7 @@ Unfortunately, the name `rejson` in npm is already taken.
 ## Example Usage
 
 ```javascript
-var Rejson = require('rejson');
+var Rejson = require('iorejson');
 
 var instance = new Rejson();
 yield instance.connect()
